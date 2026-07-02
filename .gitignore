@@ -1,0 +1,14 @@
+# OS
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# Env / local config (none should ever exist here, but belt and suspenders)
+.env
+.env.*
+*.local
