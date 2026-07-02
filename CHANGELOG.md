@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/).
 
+## [0.4.1] - 2026-07-02
+
+### Fixed
+- **Skill-discovery gap for UI and refactoring tasks:** the v0.3 rename dropped
+  "ui" from the skill name and the description contained no UI, frontend,
+  interface, or refactoring vocabulary — so purely UI-phrased requests ("fix the
+  layout", "align these buttons") could fail to load the skill despite its full
+  UI coverage. The `description` frontmatter now names refactoring and
+  UI/frontend/interface work explicitly. Metadata-only change; the rule body is
+  untouched.
+
 ## [0.4.0] - 2026-07-02
 
 Hardened for weak agents. v0.3's dedup pass assumed a capable harness behind the

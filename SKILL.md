@@ -1,9 +1,9 @@
 ---
 name: coder-tdd-qa
-description: "Engineering, TDD, and QA standards for coding work — hard rules, a test-first loop that guarantees tests are real (not merely present), anti-fabrication evidence rules, a falsification pass, and a size-gated release checklist. Use for coding, debugging, and feature work. The Release Gate section applies only when pushing, publishing, or releasing."
+description: "Engineering, TDD, and QA standards for coding work — hard rules, a test-first loop that guarantees tests are real (not merely present), anti-fabrication evidence rules, a falsification pass, and a size-gated release checklist. Use for coding, debugging, feature work, refactoring, and UI/frontend/interface work (layout, styling, components). The Release Gate section applies only when pushing, publishing, or releasing."
 ---
 
-# Coder TDD/QA Standards — v0.4
+# Coder TDD/QA Standards — v0.4.1
 
 Portable agent standards. In **Claude Code**, install as a skill (this file, with the
 frontmatter above). In **Codex or any other agent**, paste everything below the
