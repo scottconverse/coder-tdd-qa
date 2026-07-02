@@ -1,8 +1,10 @@
 # coder-tdd-qa
 
 A portable rulebook for AI coding agents: test-driven development, honest
-verification, and a size-gated release checklist — in one markdown file that works
-in Claude Code, Codex, or any agent that reads instructions.
+verification, and a size-gated release checklist — plain markdown that works in
+Claude Code, Codex, or any agent that reads instructions. Ships in two forms:
+[SKILL.md](SKILL.md) (full standards) and [SKILL-LITE.md](SKILL-LITE.md) (the
+condensed contract for small tasks, with a tripwire back to full).
 
 **Landing page:** https://scottconverse.github.io/coder-tdd-qa/
 
@@ -40,6 +42,16 @@ and your assistant follows them.
 The body is harness-agnostic by construction: no tool names, no skill-loader
 features, no file-layout assumptions.
 
+**Lite** — for quick fixes, small scripts, or a small project's `AGENTS.md`,
+install [SKILL-LITE.md](SKILL-LITE.md) the same way (as
+`~/.claude/skills/coder-tdd-qa-lite/SKILL.md` in Claude Code). Same
+non-negotiable rules, Evidence Format, and TDD loop — enforced identical to the
+full document by `check_sync.py` in CI — minus workflow and release ceremony.
+Its escalation tripwire sends the agent back to the full standards when a change
+outgrows lite: more than one file or ~50 lines, any public interface, untrusted
+input/auth/secrets/deserialization, or anything being pushed or released. The
+human picks the tier; the agent only escalates, never downgrades.
+
 ## What's inside
 
 | Section | What it does |
@@ -74,7 +86,10 @@ features, no file-layout assumptions.
   hygiene files; only published packages get packaging checks; only flagship
   projects get manuals and landing pages, and only when asked.
 - **Each rule stated once.** No duplication between sections — later sections
-  reference, never restate.
+  reference, never restate. The one sanctioned duplication — lite's copy of the
+  core — is machine-enforced: `check_sync.py` fails CI if the copies drift, if a
+  required block goes missing, if a new rule is added without deciding its lite
+  fate, or if lite's safety tripwire is deleted.
 
 ## Requirements
 

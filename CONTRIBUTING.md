@@ -1,8 +1,30 @@
 # Contributing
 
-This project is a single markdown rulebook ([SKILL.md](SKILL.md)). There is no
-build, no dependencies, and no test suite — the "code" is prose that agents
-execute. That makes review standards *more* important, not less.
+This project is a markdown rulebook in two forms: [SKILL.md](SKILL.md) (canonical,
+full) and [SKILL-LITE.md](SKILL-LITE.md) (condensed, derived). There is no build
+and no dependencies — the "code" is prose that agents execute. That makes review
+standards *more* important, not less. The one runnable check is
+[check_sync.py](check_sync.py) (stdlib Python), which guards the two files
+against drift; CI runs it on every push.
+
+## Single-source mechanism
+
+SKILL.md is the only file you edit rules in. Three kinds of text exist:
+
+- **Synced blocks** — wrapped in `<!-- sync:name -->` … `<!-- /sync:name -->`
+  comments in both files, annotated `lite:required` or `lite:excluded` in
+  SKILL.md. Edit in SKILL.md, copy verbatim to SKILL-LITE.md, run
+  `python check_sync.py`. The check fails on: a differing block (DRIFT), a
+  required block missing from lite (MISSING), a lite block full no longer has
+  (ORPHAN), or a numbered rule in HARD RULES with no annotation at all
+  (COVERAGE) — so adding a rule forces a conscious decision about lite.
+- **Pinned phrases** — lite-only safety text (the escalation tripwire) has no
+  synced counterpart, so the check pins its key phrases instead: they may be
+  reworded but never deleted (PIN failure).
+- **Free-hand lite text** — everything else in SKILL-LITE.md (headers, the
+  minimum report). Unchecked by construction; review manually on every lite
+  touch. Known residual gap: a brand-new *section* someone believes belongs in
+  lite is caught by no assertion — that judgment stays human.
 
 ## Setup
 
@@ -31,8 +53,9 @@ That's it. Edit `SKILL.md` with any editor.
 
 ## Testing a change
 
-The test is a read-through against the failure modes this document exists to
-prevent. Before opening a PR, check your changed text against each question:
+First: `python check_sync.py` must pass. Then the test is a read-through against
+the failure modes this document exists to prevent. Before opening a PR, check
+your changed text against each question:
 
 - Could an agent satisfy the new/changed rule with a test that asserts nothing?
 - Could it satisfy the rule by summarizing output instead of pasting it?

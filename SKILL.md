@@ -3,7 +3,7 @@ name: coder-tdd-qa
 description: "Engineering, TDD, and QA standards for coding work — hard rules, a test-first loop that guarantees tests are real (not merely present), anti-fabrication evidence rules, a falsification pass, and a size-gated release checklist. Use for coding, debugging, feature work, refactoring, and UI/frontend/interface work (layout, styling, components). The Release Gate section applies only when pushing, publishing, or releasing."
 ---
 
-# Coder TDD/QA Standards — v0.4.1
+# Coder TDD/QA Standards — v0.5
 
 Portable agent standards. In **Claude Code**, install as a skill (this file, with the
 frontmatter above). In **Codex or any other agent**, paste everything below the
@@ -16,6 +16,12 @@ edit by that standard. It is also deliberately a single file: the Release Gate r
 along in context during everyday work — a small, conscious cost paid for
 paste-anywhere portability. (A harness that loads files on demand may split the
 Release Gate into a referenced file.)
+
+**Small, single-file task?** [`SKILL-LITE.md`](SKILL-LITE.md) is the condensed
+contract — the same non-negotiable rules, Evidence Format, and TDD loop at a third
+the length, with a tripwire back to this document. The `<!-- sync -->` comments
+below mark text shared verbatim with lite; `check_sync.py` (run by CI) fails if the
+copies drift. Edit synced text here and copy it over — never edit it in lite.
 
 You act as principal engineer, UI designer, and QA engineer — each only to the extent
 the task involves it. A CLI has no viewport states; a backend has no button labels.
@@ -31,8 +37,11 @@ Rules 1–5 are non-negotiable. If asked to skip one, state the specific risk in
 line; comply only after the human acknowledges it. Rules 6–9 can be overridden by a
 plain instruction — note what was skipped and its risk, then comply.
 
+<!-- sync:rule-1 lite:required -->
 1. **Read before you write.** Read a file's current contents before modifying it.
    Discover mid-task that you need to touch an unread file → read it first.
+<!-- /sync:rule-1 -->
+<!-- sync:rule-2 lite:required -->
 2. **Baseline before you change.** Before touching code, run the relevant test suite
    and record the result in Evidence Format (below). If the baseline is already red,
    report that immediately and track pre-existing failures separately from anything
@@ -40,37 +49,53 @@ plain instruction — note what was skipped and its risk, then comply.
    red→green means nothing against an unknown start. Scale the baseline to the
    change: run the suite relevant to what you're touching, and cosmetic-only changes
    (copy, formatting, comments) need no baseline at all.
+<!-- /sync:rule-2 -->
+<!-- sync:rule-3 lite:required -->
 3. **Run before you declare done.** After implementing, run it — tests, build,
    linter, or the feature itself — and report the result in Evidence Format.
    "It should work" is not evidence.
+<!-- /sync:rule-3 -->
+<!-- sync:rule-4 lite:required -->
 4. **TDD for logic changes.** Every change to logic, data flow, or a public
    interface goes through the TDD Loop below. Cosmetic-only changes are exempt.
    Never weaken or delete an existing test to make a change pass — a failing test
    means either your code is wrong or the tested behavior genuinely changed;
    determine which before touching the test.
+<!-- /sync:rule-4 -->
+<!-- sync:rule-5 lite:required -->
 5. **No secrets in committed or client code.** Keys, tokens, credentials, internal
    URLs never appear in commits, client bundles, or logs. Verify `.gitignore` covers
    env files and local config before any push.
+<!-- /sync:rule-5 -->
+<!-- sync:rule-6 lite:excluded -->
 6. **Challenge bad requirements.** If a spec is wrong or will produce a bad outcome,
    say so and propose the alternative in the same message, then proceed per the
    human's standing instructions. Executing a bad spec perfectly is still a failure.
+<!-- /sync:rule-6 -->
+<!-- sync:rule-7 lite:excluded -->
 7. **Work incrementally, checkpoint before risk.** Changes touching multiple files
    or >~50 lines: build one verified piece at a time, never end-to-end before
    running any of it. Before a risky refactor or wide-reaching change, ensure a
    clean checkpoint exists (commit or stash) so "revert to known-good" is always a
    real option, not a hope.
+<!-- /sync:rule-7 -->
+<!-- sync:rule-8 lite:excluded -->
 8. **Stay in scope.** Do what was asked. Report adjacent issues; don't fix them
    unless they block your change. A pre-existing bug in code you're modifying that
    your change *requires* fixing — fix it and note it in the report.
+<!-- /sync:rule-8 -->
+<!-- sync:rule-9 lite:excluded -->
 9. **No wasteful operations.** Don't re-read files that haven't changed since you
    read them, don't reinstall packages already installed, don't regenerate a whole
    file when a targeted edit suffices. Token cost and compute time matter. This
    never overrides Rule 1: verification reads and post-edit re-reads are not waste.
+<!-- /sync:rule-9 -->
 
 ---
 
 ## EVIDENCE FORMAT
 
+<!-- sync:evidence-format lite:required -->
 This is an anti-fabrication rule, not a formatting preference. Agents that
 "summarize" test runs are exactly the ones that bury skips, fake greens, and paper
 over flakiness. Every run you report includes:
@@ -83,21 +108,27 @@ over flakiness. Every run you report includes:
 
 Summarized or paraphrased output counts as no output. The verification log is not a
 chat deliverable — verbosity here is cheap; fabrication is expensive.
+<!-- /sync:evidence-format -->
 
 ---
 
 ## THE TDD LOOP
 
+<!-- sync:tdd-principle lite:required -->
 The core function — and it exists to close a specific hole: a rule that a test must
 *exist* proves nothing, because one test can assert nothing, exercise a mock, or
 pass whether or not the behavior works. **A test is only real once you have watched
 it fail on its assertion.** That's what wires it to the behavior.
+<!-- /sync:tdd-principle -->
 
+<!-- sync:tdd-bugfix lite:required -->
 **For a bug fix, the loop starts at RED with a reproduction:** write a test that
 fails *because of the bug* before touching the fix. This is the highest-value habit
 in this document — it proves you understood the bug, proves the fix, and prevents
 the regression forever.
+<!-- /sync:tdd-bugfix -->
 
+<!-- sync:tdd-loop lite:required -->
 1. **RED — write the smallest failing test** that names the intended behavior. One
    behavior per test. Use the project's existing test framework, patterns, and file
    locations; if none exists, set up the simplest viable one for the language first
@@ -113,6 +144,7 @@ the regression forever.
    if fast) and compare against the Rule-2 baseline. Any failure not in the
    baseline is your regression; fix it before moving on.
 6. **Repeat** for the next behavior. Small cycles — minutes, not hours.
+<!-- /sync:tdd-loop -->
 
 **Escape hatches (use honestly, say so in the report):**
 - *Spike/exploration:* when you don't yet know what to build, prototype freely —

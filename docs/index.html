@@ -82,7 +82,7 @@
 <body>
 
 <header class="wrap">
-  <div class="badge">v0.4.1 · MIT · one markdown file</div>
+  <div class="badge">v0.5.0 · MIT · pure markdown · full + lite</div>
   <h1>Your AI wrote a test.<br><span class="fail">Did it ever fail?</span> <span class="pass">Now it counts.</span></h1>
   <p class="sub">coder-tdd-qa is a portable rulebook that makes AI coding agents prove their work — test-first, with verbatim evidence — instead of declaring "done, it works."</p>
   <div class="cta">
@@ -107,6 +107,8 @@ curl -o ~/.claude/skills/coder-tdd-qa/SKILL.md \
   https://raw.githubusercontent.com/scottconverse/coder-tdd-qa/main/SKILL.md</code></pre>
   <h3>Codex / any other agent</h3>
   <p class="muted">Paste everything below the YAML frontmatter of <a href="https://github.com/scottconverse/coder-tdd-qa/blob/main/SKILL.md">SKILL.md</a> into your repo's <code>AGENTS.md</code> or the agent's system prompt. The body is harness-agnostic by construction — no tool names, no loader features, no file-layout assumptions.</p>
+  <h3>Lite — for small tasks</h3>
+  <p class="muted"><a href="https://github.com/scottconverse/coder-tdd-qa/blob/main/SKILL-LITE.md">SKILL-LITE.md</a> is the condensed contract: the same non-negotiable rules, evidence format, and TDD loop (kept identical to the full document by a CI-enforced sync check), minus workflow and release ceremony. Built-in tripwire escalates back to the full standards when a change outgrows one file, touches untrusted input, auth, or secrets, or is being pushed.</p>
 </section>
 
 <section class="wrap">

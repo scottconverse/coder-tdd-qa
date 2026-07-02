@@ -4,6 +4,29 @@ All notable changes to this project will be documented in this file.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/).
 
+## [0.5.0] - 2026-07-02
+
+### Added
+- **SKILL-LITE.md** — a ~140-line condensed contract for small tasks
+  (single-file, ~50 lines, nothing released): the five non-negotiable rules,
+  Evidence Format, and TDD loop verbatim, plus a minimum report. Built for rule
+  salience on small/local models, and for pasting into a small project's
+  AGENTS.md where the full document is overkill.
+- **Escalation tripwire** in lite: growing past one file/~50 lines, touching any
+  public interface, touching untrusted input/auth/secrets/deserialization, or
+  pushing/releasing → stop and load the full standards. Lite is a fast path,
+  not a lower bar.
+- **check_sync.py + CI** — the repo's first runnable check, TDD'd into
+  existence against four deliberately broken fixtures. Four assertions: synced
+  blocks match (DRIFT), required blocks present with no orphans
+  (MISSING/ORPHAN), every HARD RULES entry carries a lite annotation so
+  additions can't silently skip lite (COVERAGE), and lite's safety-critical
+  tripwire phrases exist even though they're free to be reworded (PIN). Runs on
+  every push via GitHub Actions.
+- Sync markers (`<!-- sync:name lite:required|excluded -->`) in SKILL.md, a
+  header pointer to lite, and a CONTRIBUTING section documenting the
+  single-source mechanism and its one named residual gap.
+
 ## [0.4.1] - 2026-07-02
 
 ### Fixed
