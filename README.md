@@ -4,6 +4,8 @@ A portable rulebook for AI coding agents: test-driven development, honest
 verification, and a size-gated release checklist — in one markdown file that works
 in Claude Code, Codex, or any agent that reads instructions.
 
+**Landing page:** https://scottconverse.github.io/coder-tdd-qa/
+
 ## What this is (plain English)
 
 AI coding assistants have a bad habit: they write code, say "done, it works," and

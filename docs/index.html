@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>coder-tdd-qa — a TDD rulebook for AI coding agents</title>
+<meta name="description" content="A portable markdown rulebook that makes AI coding agents prove their work: watch-it-fail-first TDD, anti-fabrication evidence rules, and a size-gated release checklist. Works in Claude Code, Codex, or any agent.">
+<style>
+  :root {
+    --bg: #0f1117; --panel: #171a23; --panel2: #1d2130;
+    --text: #d7dae2; --muted: #8b90a0; --accent: #4ecf8a;
+    --red: #e0645f; --amber: #d9a441; --border: #2a2f40;
+    --mono: ui-monospace, "Cascadia Code", Consolas, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    background: var(--bg); color: var(--text);
+    font: 17px/1.65 system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  code, pre { font-family: var(--mono); font-size: 0.88em; }
+  code { background: var(--panel2); padding: 2px 6px; border-radius: 4px; }
+  pre {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 8px; padding: 16px 18px; overflow-x: auto; line-height: 1.5;
+  }
+  pre code { background: none; padding: 0; }
+
+  header { padding: 72px 0 48px; text-align: center; }
+  .badge {
+    display: inline-block; font-family: var(--mono); font-size: 13px;
+    color: var(--accent); border: 1px solid var(--border);
+    border-radius: 20px; padding: 4px 14px; margin-bottom: 24px;
+  }
+  h1 { font-size: clamp(30px, 5vw, 44px); line-height: 1.15; letter-spacing: -0.5px; }
+  h1 .fail { color: var(--red); } h1 .pass { color: var(--accent); }
+  .sub { color: var(--muted); font-size: clamp(17px, 2.4vw, 20px); max-width: 640px; margin: 18px auto 0; }
+  .cta { margin-top: 32px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    display: inline-block; padding: 11px 22px; border-radius: 8px;
+    font-weight: 600; font-size: 15px;
+  }
+  .btn-primary { background: var(--accent); color: #0c1310; }
+  .btn-primary:hover { text-decoration: none; filter: brightness(1.1); }
+  .btn-ghost { border: 1px solid var(--border); color: var(--text); }
+  .btn-ghost:hover { text-decoration: none; border-color: var(--muted); }
+
+  section { padding: 44px 0; border-top: 1px solid var(--border); }
+  h2 { font-size: 25px; margin-bottom: 18px; letter-spacing: -0.3px; }
+  h3 { font-size: 18px; margin: 22px 0 8px; }
+  p + p { margin-top: 12px; }
+  .muted { color: var(--muted); }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; margin-top: 22px; }
+  .card {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 10px; padding: 18px 20px;
+  }
+  .card h3 { margin: 0 0 6px; font-size: 16px; }
+  .card p { color: var(--muted); font-size: 15px; line-height: 1.55; }
+
+  figure { margin: 28px 0 8px; text-align: center; }
+  figcaption { color: var(--muted); font-size: 14px; margin-top: 10px; }
+  svg { max-width: 100%; height: auto; }
+
+  .tiers { margin-top: 20px; }
+  .tier {
+    display: flex; gap: 16px; align-items: baseline;
+    padding: 14px 0; border-bottom: 1px solid var(--border);
+  }
+  .tier:last-child { border-bottom: 0; }
+  .tier b { font-family: var(--mono); color: var(--amber); white-space: nowrap; font-size: 14px; }
+  .tier span { color: var(--muted); font-size: 15.5px; }
+
+  footer { border-top: 1px solid var(--border); padding: 32px 0 48px; color: var(--muted); font-size: 14.5px; text-align: center; }
+  footer a { color: var(--muted); text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <div class="badge">v0.3.0 · MIT · one markdown file</div>
+  <h1>Your AI wrote a test.<br><span class="fail">Did it ever fail?</span> <span class="pass">Now it counts.</span></h1>
+  <p class="sub">coder-tdd-qa is a portable rulebook that makes AI coding agents prove their work — test-first, with verbatim evidence — instead of declaring "done, it works."</p>
+  <div class="cta">
+    <a class="btn btn-primary" href="https://github.com/scottconverse/coder-tdd-qa">View on GitHub</a>
+    <a class="btn btn-ghost" href="https://github.com/scottconverse/coder-tdd-qa/blob/main/SKILL.md">Read the rules</a>
+  </div>
+</header>
+
+<section class="wrap">
+  <h2>The problem, in plain English</h2>
+  <p>AI coding assistants have a bad habit: they write code, say it works, and move on — without proving it. Worse, a rule like "always write tests" is easy to satisfy dishonestly: an agent can write a test that asserts nothing, exercises a mock, or passes whether or not the feature works. And when asked for test results, the agents most likely to be wrong are the ones most likely to <em>summarize</em> the output — which is exactly where hidden failures go to die.</p>
+  <p>This rulebook closes those loopholes with one core idea: <strong>a test only counts once the agent has watched it fail.</strong> Write the test, watch it fail on its assertion, then write the code that turns it green — and paste the raw output at each step, counts verbatim, failures in full. Before sign-off, the agent must also try to <em>break</em> its own change and report what happened.</p>
+  <p>You don't need to understand the rules to benefit. Install the file; your agent follows them.</p>
+</section>
+
+<section class="wrap">
+  <h2>Quick start</h2>
+  <h3>Claude Code</h3>
+  <pre><code># personal (all projects)
+mkdir -p ~/.claude/skills/coder-tdd-qa
+curl -o ~/.claude/skills/coder-tdd-qa/SKILL.md \
+  https://raw.githubusercontent.com/scottconverse/coder-tdd-qa/main/SKILL.md</code></pre>
+  <h3>Codex / any other agent</h3>
+  <p class="muted">Paste everything below the YAML frontmatter of <a href="https://github.com/scottconverse/coder-tdd-qa/blob/main/SKILL.md">SKILL.md</a> into your repo's <code>AGENTS.md</code> or the agent's system prompt. The body is harness-agnostic by construction — no tool names, no loader features, no file-layout assumptions.</p>
+</section>
+
+<section class="wrap">
+  <h2>The TDD loop</h2>
+  <figure>
+    <svg viewBox="0 0 720 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="TDD loop: baseline, red, green, refactor, widen, falsify">
+      <defs>
+        <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0 0 L10 5 L0 10 z" fill="#8b90a0"/>
+        </marker>
+      </defs>
+      <!-- baseline -->
+      <rect x="10" y="95" width="110" height="70" rx="10" fill="#1d2130" stroke="#2a2f40"/>
+      <text x="65" y="124" text-anchor="middle" fill="#d9a441" font-size="14" font-weight="bold" font-family="monospace">BASELINE</text>
+      <text x="65" y="146" text-anchor="middle" fill="#8b90a0" font-size="11">run suite first</text>
+      <!-- red -->
+      <rect x="160" y="95" width="110" height="70" rx="10" fill="#1d2130" stroke="#e0645f"/>
+      <text x="215" y="124" text-anchor="middle" fill="#e0645f" font-size="14" font-weight="bold" font-family="monospace">RED</text>
+      <text x="215" y="146" text-anchor="middle" fill="#8b90a0" font-size="11">watch it fail</text>
+      <!-- green -->
+      <rect x="310" y="95" width="110" height="70" rx="10" fill="#1d2130" stroke="#4ecf8a"/>
+      <text x="365" y="124" text-anchor="middle" fill="#4ecf8a" font-size="14" font-weight="bold" font-family="monospace">GREEN</text>
+      <text x="365" y="146" text-anchor="middle" fill="#8b90a0" font-size="11">minimum code</text>
+      <!-- refactor -->
+      <rect x="460" y="95" width="110" height="70" rx="10" fill="#1d2130" stroke="#2a2f40"/>
+      <text x="515" y="124" text-anchor="middle" fill="#d7dae2" font-size="13" font-weight="bold" font-family="monospace">REFACTOR</text>
+      <text x="515" y="146" text-anchor="middle" fill="#8b90a0" font-size="11">tests as a net</text>
+      <!-- widen/falsify -->
+      <rect x="600" y="95" width="110" height="70" rx="10" fill="#1d2130" stroke="#2a2f40"/>
+      <text x="655" y="118" text-anchor="middle" fill="#d7dae2" font-size="12.5" font-weight="bold" font-family="monospace">WIDEN +</text>
+      <text x="655" y="134" text-anchor="middle" fill="#d7dae2" font-size="12.5" font-weight="bold" font-family="monospace">FALSIFY</text>
+      <text x="655" y="152" text-anchor="middle" fill="#8b90a0" font-size="11">try to break it</text>
+      <!-- arrows -->
+      <line x1="120" y1="130" x2="155" y2="130" stroke="#8b90a0" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="270" y1="130" x2="305" y2="130" stroke="#8b90a0" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="420" y1="130" x2="455" y2="130" stroke="#8b90a0" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="570" y1="130" x2="595" y2="130" stroke="#8b90a0" stroke-width="1.5" marker-end="url(#arr)"/>
+      <!-- loop back -->
+      <path d="M 655 95 C 655 30, 215 30, 215 90" fill="none" stroke="#8b90a0" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#arr)"/>
+      <text x="435" y="42" text-anchor="middle" fill="#8b90a0" font-size="11.5" font-style="italic">next behavior — small cycles, minutes not hours</text>
+      <!-- evidence strip -->
+      <text x="360" y="215" text-anchor="middle" fill="#8b90a0" font-size="12" font-family="monospace">every step: exact command + verbatim counts + failures in full</text>
+    </svg>
+    <figcaption>Bug fixes start at RED with a failing reproduction test — it proves the diagnosis, proves the fix, and prevents the regression forever.</figcaption>
+  </figure>
+</section>
+
+<section class="wrap">
+  <h2>What's in the rulebook</h2>
+  <div class="grid">
+    <div class="card"><h3>8 hard rules</h3><p>Read before write, baseline before change, run before done, TDD for logic, no secrets — non-negotiable. Three more overridable with acknowledged risk.</p></div>
+    <div class="card"><h3>Anti-fabrication evidence</h3><p>Exact command, verbatim counts line, every failure in full. Only per-test PASS spam may collapse. Summarized output counts as no output.</p></div>
+    <div class="card"><h3>Falsification pass</h3><p>Before sign-off the agent attacks its own change — edge cases and hostile inputs it's least confident about — and reports what happened.</p></div>
+    <div class="card"><h3>Baseline &amp; checkpoints</h3><p>Suite state recorded before any change; a commit or stash exists before risky refactors, so "revert to known-good" is always real.</p></div>
+    <div class="card"><h3>Security with teeth</h3><p>Five concrete per-change questions — trust boundaries, authn/authz, secrets, unsafe eval, dep vulns. Blanket "N/A" disallowed.</p></div>
+    <div class="card"><h3>Honest escape hatches</h3><p>Spikes, untestable surfaces, generated code — allowed, but declared. The rules bend where reality bends, never silently.</p></div>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>Release gate — ceremony scales with stakes</h2>
+  <p class="muted">A push to a public remote is a release event, not a build step. But a weekend utility shouldn't get flagship ceremony:</p>
+  <div class="tiers">
+    <div class="tier"><b>Tier 1</b><span>Every public repo — secrets scan, LICENSE / README / CHANGELOG / .gitignore, full suite green with evidence.</span></div>
+    <div class="tier"><b>Tier 2</b><span>Published packages (PyPI/npm) — semver in every location, accurate metadata, clean package build, constrained deps, stranger-runnable tests.</span></div>
+    <div class="tier"><b>Tier 3</b><span>Flagship projects, on request — plain-language user manual, landing page with real architecture diagrams, genuine welcome post + maintainer-authored FAQ (never fake community threads).</span></div>
+  </div>
+</section>
+
+<section class="wrap">
+  <h2>Technical notes</h2>
+  <p><strong>Zero dependencies.</strong> One markdown file, ~450 lines. No build, no runtime, nothing to install beyond copying the file.</p>
+  <p><strong>Portability is a hard constraint.</strong> The rule body never references a specific harness, tool, or loader — that's enforced in <a href="https://github.com/scottconverse/coder-tdd-qa/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a>, along with a five-question adversarial read-through that every change must survive: can an agent satisfy the new rule with a test that asserts nothing? By summarizing output? When the suite starts red? In autonomous no-confirmation mode? On a project too small for the ceremony?</p>
+  <p><strong>Designed for autonomy.</strong> No blocking "are you sure?" steps — the agent states scope in a line and proceeds, stopping only when ambiguity genuinely forks the implementation.</p>
+</section>
+
+<footer>
+  <div class="wrap">
+    <a href="https://github.com/scottconverse/coder-tdd-qa">GitHub</a> ·
+    <a href="https://github.com/scottconverse/coder-tdd-qa/blob/main/SKILL.md">SKILL.md</a> ·
+    <a href="https://github.com/scottconverse/coder-tdd-qa/blob/main/CHANGELOG.md">Changelog</a> ·
+    <a href="https://github.com/scottconverse/coder-tdd-qa/blob/main/LICENSE">MIT License</a>
+    <p style="margin-top:10px">© 2026 Scott Converse. A test that has never failed proves nothing.</p>
+  </div>
+</footer>
+
+</body>
+</html>
