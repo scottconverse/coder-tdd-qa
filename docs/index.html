@@ -82,7 +82,7 @@
 <body>
 
 <header class="wrap">
-  <div class="badge">v0.3.0 · MIT · one markdown file</div>
+  <div class="badge">v0.4.0 · MIT · one markdown file</div>
   <h1>Your AI wrote a test.<br><span class="fail">Did it ever fail?</span> <span class="pass">Now it counts.</span></h1>
   <p class="sub">coder-tdd-qa is a portable rulebook that makes AI coding agents prove their work — test-first, with verbatim evidence — instead of declaring "done, it works."</p>
   <div class="cta">
@@ -157,7 +157,7 @@ curl -o ~/.claude/skills/coder-tdd-qa/SKILL.md \
 <section class="wrap">
   <h2>What's in the rulebook</h2>
   <div class="grid">
-    <div class="card"><h3>8 hard rules</h3><p>Read before write, baseline before change, run before done, TDD for logic, no secrets — non-negotiable. Three more overridable with acknowledged risk.</p></div>
+    <div class="card"><h3>9 hard rules</h3><p>Read before write, baseline before change, run before done, TDD for logic, no secrets — non-negotiable. Four more overridable with acknowledged risk.</p></div>
     <div class="card"><h3>Anti-fabrication evidence</h3><p>Exact command, verbatim counts line, every failure in full. Only per-test PASS spam may collapse. Summarized output counts as no output.</p></div>
     <div class="card"><h3>Falsification pass</h3><p>Before sign-off the agent attacks its own change — edge cases and hostile inputs it's least confident about — and reports what happened.</p></div>
     <div class="card"><h3>Baseline &amp; checkpoints</h3><p>Suite state recorded before any change; a commit or stash exists before risky refactors, so "revert to known-good" is always real.</p></div>
@@ -181,6 +181,7 @@ curl -o ~/.claude/skills/coder-tdd-qa/SKILL.md \
   <p><strong>Zero dependencies.</strong> One markdown file, ~450 lines. No build, no runtime, nothing to install beyond copying the file.</p>
   <p><strong>Portability is a hard constraint.</strong> The rule body never references a specific harness, tool, or loader — that's enforced in <a href="https://github.com/scottconverse/coder-tdd-qa/blob/main/CONTRIBUTING.md">CONTRIBUTING.md</a>, along with a five-question adversarial read-through that every change must survive: can an agent satisfy the new rule with a test that asserts nothing? By summarizing output? When the suite starts red? In autonomous no-confirmation mode? On a project too small for the ceremony?</p>
   <p><strong>Designed for autonomy.</strong> No blocking "are you sure?" steps — the agent states scope in a line and proceeds, stopping only when ambiguity genuinely forks the implementation.</p>
+  <p><strong>Written for the weakest agent that might read it.</strong> The rulebook assumes the host harness provides no other guidance — numbered checklists over prose, reporting hooks on every rule, communication standards included. A bare 7B local model gets the same scaffolding a flagship model does.</p>
 </section>
 
 <footer>

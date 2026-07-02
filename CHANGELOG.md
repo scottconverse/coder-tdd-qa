@@ -4,6 +4,39 @@ All notable changes to this project will be documented in this file.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/).
 
+## [0.4.0] - 2026-07-02
+
+Hardened for weak agents. v0.3's dedup pass assumed a capable harness behind the
+reader; this release restores everything a bare 7B model with no harness guidance
+needs, and states that design assumption in the document itself.
+
+### Added
+- **Hard Rule 9 — no wasteful operations:** no redundant file re-reads, package
+  reinstalls, or whole-file regeneration; explicitly never overrides Rule 1.
+- **Communication section:** lead with what changed, report the Verification
+  Report not effort, ask only when ambiguity genuinely forks the implementation.
+  (Capable harnesses teach this natively; bare agents get nothing.)
+- **Verification Report fields:** "Files read" (the enforcement hook that makes
+  Rule 1 verifiable) and "Version control" (commit hashes + green-at-commit
+  confirmation).
+- **Header design assumptions:** "assumes the host harness provides no other
+  guidance," and the single-file context-cost tradeoff named as a conscious
+  choice rather than an oversight.
+- **Falsification handoff note:** the falsification pass is self-audit; open
+  concerns go to a downstream independent adversarial gate if one exists.
+- **Release Gate:** explicit "re-read this section, not from memory" instruction;
+  README content spec restored to the full enumeration.
+
+### Changed
+- Rule 2 (baseline) gains a proportionality clause: scale to the change;
+  cosmetic-only changes need no baseline.
+- "Before building" converted back to a numbered checklist — small models follow
+  numbered steps far more reliably than prose.
+- Stdlib-first and minimize-the-dependency-tree restored explicitly; dependency
+  updates now require a breaking-change changelog check.
+- Doc-sync rule moved from below the Release Gate into Workflow, where everyday
+  reading actually encounters it.
+
 ## [0.3.1] - 2026-07-02
 
 ### Added

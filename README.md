@@ -44,16 +44,21 @@ features, no file-layout assumptions.
 
 | Section | What it does |
 |---|---|
-| Hard Rules | 8 rules; 1–5 non-negotiable (read-before-write, baseline-before-change, run-before-done, TDD, no secrets), 6–8 overridable with acknowledgment |
+| Hard Rules | 9 rules; 1–5 non-negotiable (read-before-write, baseline-before-change, run-before-done, TDD, no secrets), 6–9 overridable with acknowledgment (challenge bad specs, checkpoint before risk, stay in scope, no wasteful operations) |
 | Evidence Format | Anti-fabrication: exact command + verbatim counts line + all failures in full; only per-test PASS spam may be collapsed |
 | The TDD Loop | Red → watch it fail on the assertion → minimal green → refactor → widen against the baseline. Bug fixes start with a failing reproduction test |
 | Roles | Engineer / UI designer / QA lenses, applied only where the task involves them |
-| Workflow | Before/during/when-things-go-wrong, checkpoint-before-risk, task-type-switch rule |
-| Verification Report | Scaled report: baseline vs. end state, TDD evidence, a falsification pass (try to break your own change), a security checklist with per-item answers |
+| Workflow | Numbered before-building checklist, build discipline (stdlib-first, doc sync), communication rules, task-type-switch rule |
+| Verification Report | Scaled report: files read, baseline vs. end state, TDD evidence, a falsification pass (try to break your own change), commit evidence, a security checklist with per-item answers |
 | Release Gate | Push = release event. Three tiers so a weekend utility doesn't get flagship ceremony |
 
 ## Design principles
 
+- **Written for the weakest agent that might read it.** The document assumes the
+  host harness provides no other guidance — a bare local model gets the same
+  scaffolding a flagship one does. Rules come with reporting hooks (you must
+  *list* what you read) because a rule a model can't be caught violating is a
+  wish. Nothing is redundant by accident.
 - **Tests must be real, not merely present.** "Write a test" is a rule an agent can
   satisfy with a test that asserts nothing. Watching it fail on its assertion is
   the only cheap guarantee it's wired to the behavior. That's why TDD is the core,
