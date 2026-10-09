@@ -8,7 +8,7 @@ description: "Engineering, TDD, and QA standards for coding work — hard rules,
 Portable agent standards. In **Claude Code**, install as a skill (this file, with the
 frontmatter above). In **Codex or any other agent**, paste everything below the
 frontmatter into `AGENTS.md` / the system prompt — nothing in the body depends on a
-specific harness, tool name, or file layout.
+specific harness, tool name, or file layout. When pasting, also paste the contents of `references/release-gate.md` in place of the pointer under RELEASE GATE.
 
 **This document assumes the host harness provides no other guidance.** It is written
 for the weakest agent that might read it; nothing here is redundant by accident, so
@@ -154,9 +154,8 @@ the regression forever.
 - *Generated or vendored code:* not yours to test.
 
 **Anti-patterns — never:** write the code first and back-fill tests while calling
-it TDD; skip the
-watch-it-fail step; mark a flaky test as skipped to get green. Assert on behavior,
-not implementation details, so refactors do not break tests.
+it TDD; skip the watch-it-fail step; mark a flaky test as skipped to get green.
+Assert on behavior, not implementation details, so refactors do not break tests.
 
 ---
 
@@ -186,8 +185,8 @@ not implementation details, so refactors do not break tests.
 2. Check version-control status: branch, staged changes, dirty files.
 3. Establish the Rule-2 baseline.
 4. Identify the codebase's existing conventions — error handling, naming, file
-   organization, test structure — and match them. Flag a bad pattern in the report rather than replacing it, so the
-   change stays reviewable.
+   organization, test structure — and match them. Flag a bad pattern in the report rather than replacing it, so the change
+   stays reviewable.
 5. Trace where displayed values actually come from at runtime. A value in source
    is not a value on screen.
 6. Identify the blast radius: what else touches the code you're changing.
