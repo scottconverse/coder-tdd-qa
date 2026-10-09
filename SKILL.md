@@ -3,7 +3,7 @@ name: coder-tdd-qa
 description: "Engineering, TDD, and QA standards for coding work — hard rules, a test-first loop that guarantees tests are real (not merely present), anti-fabrication evidence rules, a falsification pass, and a size-gated release checklist. Use for coding, debugging, feature work, refactoring, and UI/frontend/interface work (layout, styling, components). The Release Gate section applies only when pushing, publishing, or releasing."
 ---
 
-# Coder TDD/QA Standards — v0.5
+# Coder TDD/QA Standards — v0.5.1
 
 Portable agent standards. In **Claude Code**, install as a skill (this file, with the
 frontmatter above). In **Codex or any other agent**, paste everything below the
@@ -80,9 +80,8 @@ plain instruction — note what was skipped and its risk, then comply.
    real option, not a hope.
 <!-- /sync:rule-7 -->
 <!-- sync:rule-8 lite:excluded -->
-8. **Stay in scope.** Do what was asked. Report adjacent issues; don't fix them
-   unless they block your change. A pre-existing bug in code you're modifying that
-   your change *requires* fixing — fix it and note it in the report.
+8. **Stay in scope.** Do what was asked and report adjacent issues; fix one only if
+   your change requires it, and say so, so the reviewer sees only intended changes.
 <!-- /sync:rule-8 -->
 <!-- sync:rule-9 lite:excluded -->
 9. **No wasteful operations.** Don't re-read files that haven't changed since you
@@ -155,8 +154,9 @@ the regression forever.
 - *Generated or vendored code:* not yours to test.
 
 **Anti-patterns — never:** write the code first and back-fill tests while calling
-it TDD; assert on implementation details instead of behavior; skip the
-watch-it-fail step; mark a flaky test as skipped to get green.
+it TDD; skip the
+watch-it-fail step; mark a flaky test as skipped to get green. Assert on behavior,
+not implementation details, so refactors do not break tests.
 
 ---
 
@@ -168,8 +168,9 @@ watch-it-fail step; mark a flaky test as skipped to get green.
   human-readable and actionable, never a raw traceback.
 - **UI designer** (UI tasks): design every rendered state — loading, success,
   empty, error, partial. Clear action-verb labels, consistent copy. Overflow,
-  truncation, and breakpoints at every viewport. Accessibility is not optional:
-  contrast, keyboard nav, focus states, screen-reader labels.
+  truncation, and breakpoints at every viewport. Check contrast, keyboard
+  navigation, focus states and screen-reader labels, because UI that fails them is
+  unusable for some users.
 - **QA engineer:** a passing suite proves the tests passed, nothing more — find
   what it doesn't cover. Static ≠ runtime: trace the actual data path to the
   screen/output. Check the browser console on UI tasks. Think blast radius: what
@@ -185,8 +186,8 @@ watch-it-fail step; mark a flaky test as skipped to get green.
 2. Check version-control status: branch, staged changes, dirty files.
 3. Establish the Rule-2 baseline.
 4. Identify the codebase's existing conventions — error handling, naming, file
-   organization, test structure — and match them. Flag a bad pattern; don't
-   silently replace it.
+   organization, test structure — and match them. Flag a bad pattern in the report rather than replacing it, so the
+   change stays reviewable.
 5. Trace where displayed values actually come from at runtime. A value in source
    is not a value on screen.
 6. Identify the blast radius: what else touches the code you're changing.
@@ -201,9 +202,9 @@ as the feature; targeted edits over file regeneration; before creating a new fil
 check whether the functionality belongs in an existing one. Prefer the standard
 library over a new dependency and an already-installed dependency over a new one —
 every dependency is one you ask users to install and trust. Pin new dependency
-versions; when updating a dependency, check its changelog for breaking changes.
-No TODO/FIXME left in committed code — fix it or list it in the report as a known
-limitation.
+versions so installs are reproducible; when updating a dependency, check its changelog for breaking changes.
+List open items in the report as known limitations instead of leaving TODO/FIXME
+in commits.
 
 **Doc sync:** any change affecting user-facing behavior, setup, configuration, or
 public interfaces updates the affected docs — README, CHANGELOG, manual, comments —
