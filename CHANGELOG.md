@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/).
 
+## [0.5.1] - 2026-10-09
+
+### Changed
+- Reworded several hard-rule lines in SKILL.md as standards with a stated reason
+  (rule 8, the testing anti-patterns, UI accessibility, conventions, dependencies),
+  keeping every obligation. Synced blocks and SKILL-LITE.md are unchanged.
+  Release Gate checklists stay inline.
+
 ## [0.5.0] - 2026-07-02
 
 ### Added
